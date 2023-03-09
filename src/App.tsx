@@ -1,32 +1,8 @@
-import axios, { AxiosError } from "axios";
-import { useEffect, useState } from "react";
 import { Product } from "./components/Product";
-import { IProduct } from "./models";
+import { useProducts } from "./hooks/products";
 
 function App() {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-
-  async function fetchProducts() {
-    try {
-      setError("");
-      setLoading(true);
-      const response = await axios.get<IProduct[]>(
-        "https://fakestoreapi.com/products?limit=5"
-      );
-      setProducts(response.data);
-      setLoading(false);
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      setLoading(false);
-      setError(error.message);
-    }
-  }
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const { loading, error, products } = useProducts();
 
   return (
     <div className="container mx-auto max-w-2xl pt-5">
